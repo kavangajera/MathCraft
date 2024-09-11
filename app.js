@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+require("dotenv").config()
 const userRoutes = require("./routes/users-routes");
 const questionRoutes = require('./routes/questions-routes')
 const answerRoutes = require('./routes/answers-routes')
@@ -32,9 +32,10 @@ app.use((error, req, res, next) => {
 //You can replace local server uri with MongoDB Atlas connection link
 mongoose
   .connect(
-    "mongodb+srv://kavangajera:Kavan7377@student.aoxcmts.mongodb.net/MathCraft" 
+     process.env.MONGO_URI
   )
   .then(() => {
+    console.log("Running at localhost://5000")
     app.listen(5000);
   })
   .catch((err) => {
