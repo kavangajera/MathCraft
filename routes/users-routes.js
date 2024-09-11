@@ -3,6 +3,7 @@ const { check } = require('express-validator')
 
 const userController = require('../controllers/users-controllers');
 const router = express.Router()
+const basicAuthMiddleware = require('../controllers/auth-controller');
 
 router.get('/', userController.getUsers);
 
@@ -32,6 +33,8 @@ router.post(
     ],
     userController.signup
 );
+
+router.patch('/edit/:userId/:Name',basicAuthMiddleware.basicAuthMiddleware,userController.editName);
 
 router.post('/login', userController.login);
 

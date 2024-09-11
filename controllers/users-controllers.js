@@ -120,7 +120,38 @@ const logout = async (req, res, next)=>{
   res.json({ message: "Logged out!" });
 }
 
+const editName = async (req, res, next) => {
+  const { userId, Name } = req.params; 
+  
+  let user;
+  try {
+    
+    user = await User.findById(userId);
+    
+    if (!user) {
+      const error = new HttpError("User not found.", 404);
+      return next(error);
+    }
+
+    
+    user.full_name = Name; 
+
+    
+    await user.save();
+
+    
+    res.status(200).json({ message: "User name updated successfully!", user });
+  } catch (err) {
+    const error = new HttpError(
+      "Updating user's name failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+};
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
 exports.logout = logout;
+exports.editName = editName;
