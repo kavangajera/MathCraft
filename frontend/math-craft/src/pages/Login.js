@@ -16,7 +16,7 @@ const Login = () => {
         { withCredentials: true }
       );
       alert(response.data.message); 
-      navigate('/');
+      navigate('/questions');
     } catch (error) {
       console.error(error);
       alert(error.response?.data.message || 'Login failed');
