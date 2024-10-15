@@ -1,0 +1,166 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #3b82f6;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  height: 4rem;
+  align-items: center;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.1);
+}
+
+.navbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.navbar-title:hover {
+  opacity: 0.8;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  margin-left: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: left 0.3s ease-in-out;
+}
+
+.nav-button:hover::before {
+  left: 0;
+}
+
+.nav-button:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-button:hover .icon {
+  transform: scale(1.1);
+}
+
+.nav-label {
+  display: none;
+  margin-left: 0.5rem;
+  transition: opacity 0.3s ease-in-out;
+}
+
+@media (min-width: 640px) {
+  .nav-label {
+    display: inline;
+  }
+}
+
+.nav-button:hover .nav-label {
+  opacity: 0.8;
+}
+
+.profile-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-button:hover .profile-img {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.navbar-wave {
+  height: 0.25rem;
+  background-image: linear-gradient(to right, transparent, white, transparent);
+  opacity: 0.3;
+  animation: wave 2s linear infinite;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.navbar:hover .navbar-wave {
+  animation: wave 1s linear infinite, pulse 2s ease-in-out infinite;
+}

@@ -1,0 +1,252 @@
+Global styles
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container styles */
+  .question-page {
+    padding-top: 60px; /* Adjust based on your navbar height */
+  }
+  
+  .math-community {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Loading animation */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f7f9;
+  }
+  
+  .math-loading {
+    font-size: 3rem;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .math-loading span {
+    display: inline-block;
+    animation: bounce 0.6s infinite alternate;
+  }
+  
+  .math-loading span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .math-loading span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-20px); }
+  }
+  
+  /* Page title */
+  .page-title {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+  }
+  
+  /* Question form */
+  .question-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .question-form h2 {
+    margin-top: 0;
+    color: #2c3e50;
+  }
+  
+  .question-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .submit-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .submit-button:hover {
+    background-color: #2980b9;
+  }
+  
+  .submit-button:active {
+    transform: translateY(1px);
+  }
+  
+  .submit-button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  
+  /* Messages */
+  .error-message, .success-message {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+  }
+  
+  .error-message {
+    background-color: #fceaea;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+  }
+  
+  .success-message {
+    background-color: #e8f8f5;
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
+  }
+  
+  /* Content layout */
+  .content-container {
+    display: flex;
+    gap: 30px;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar h2 {
+    margin-top: 0;
+    color: #2c3e50;
+  }
+  
+  .category-button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #ecf0f1;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+  }
+  
+  .category-button:hover,
+  .category-button.active {
+    background-color: #3498db;
+    color: white;
+    transform: translateX(5px);
+  }
+  
+  /* Main content */
+  .main-content {
+    flex: 3;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .main-content h2 {
+    margin-top: 0;
+    color: #2c3e50;
+  }
+  
+  /* Questions list */
+  .questions-list {
+    display: grid;
+    gap: 20px;
+  }
+  
+  .question-card {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .question-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .question-card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 18px;
+  }
+  
+  .question-card p {
+    margin: 5px 0;
+    color: #7f8c8d;
+    font-size: 14px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .content-container {
+      flex-direction: column;
+    }
+  
+    .sidebar, .main-content {
+      flex: none;
+      width: 100%;
+    }
+  
+    .question-card {
+      padding: 12px;
+    }
+  
+    .question-card h3 {
+      font-size: 16px;
+    }
+  
+    .question-card p {
+      font-size: 12px;
+    }
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .math-community {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .question-card {
+    animation: fadeIn 0.3s ease-out;
+  }

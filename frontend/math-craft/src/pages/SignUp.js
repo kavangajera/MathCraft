@@ -7,24 +7,52 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState(null); // State to store the selected file
   const navigate = useNavigate();
+
+  // Function to convert the file to a base64 string
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleFileChange = (e) => {
+    setProfilePhoto(e.target.files[0]); // Store the selected file
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Convert the profile photo to a base64 string
+    let profilePhotoBase64 = null;
+    if (profilePhoto) {
+      profilePhotoBase64 = await fileToBase64(profilePhoto);
+    }
+
+    // Create the data object
+    const userData = {
+      username,
+      email,
+      password,
+      full_name: fullName,
+      profile_photo: profilePhotoBase64, // Include the base64 image
+    };
+
     try {
       const response = await axios.post(
         'http://localhost:5000/api/user/signup',
-        {
-          username,
-          email,
-          password,
-          full_name: fullName,
-        },
+        userData, // Send the data as JSON
         { withCredentials: true }
       );
       alert(response.data.message);
       navigate('/login');
     } catch (error) {
+      // Logging the error response to debug
+      console.error(error.response?.data?.errors || error.response?.data?.message || error.message);
       alert(error.response?.data?.message || 'Signup failed');
     }
   };
@@ -62,12 +90,20 @@ const SignUp = () => {
             onChange={(e) => setFullName(e.target.value)}
             style={styles.input}
           />
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleFileChange} 
+            style={styles.inputFile} 
+          />
           <button type="submit" style={styles.button}>Signup</button>
         </form>
       </div>
     </div>
   );
 };
+
+
 
 const styles = {
   container: {
@@ -137,3 +173,5 @@ const styles = {
 };
 
 export default SignUp;
+
+
