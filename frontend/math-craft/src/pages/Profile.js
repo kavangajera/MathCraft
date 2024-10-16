@@ -58,7 +58,7 @@ const Profile = () => {
         <div className="profile-info">
           <p><strong>Username:</strong> {user.username}</p>
           <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Badge:</strong> {user.badgeId ? user.badgeId : 'No badge assigned'}</p>
+          <p><strong>Badge:</strong> {user.badgeId ? user.badgeId.position + `(${user.badgeId.description})` : 'No badge assigned'}</p>
         </div>
         <button onClick={() => navigate('/edit-profile')} className="edit-profile-button">
           Edit Profile

@@ -17,17 +17,34 @@ export default function Question() {
   const [message, setMessage] = useState('');
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
   const [searchQuery, setSearchQuery] = useState(''); // New state for search query
+  const [badgeMessage, setBadgeMessage] = useState('');
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsPageLoading(false);
     }, 1000);
-
+    fetchBadgeUpdate();
     fetchQuestions();
     fetchCurrentUser();
 
     return () => clearTimeout(timer);
   }, []);
+
+
+  const fetchBadgeUpdate = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/answer/count-votes', {
+        credentials: 'include',
+      });
+      const data = await response.json();
+      if (data.message) {
+        setBadgeMessage(data.message); // Set badge update message
+      }
+    } catch (err) {
+      console.error('Failed to fetch badge update:', err);
+    }
+  };
 
   const fetchQuestions = async () => {
     setIsLoading(true);
@@ -148,12 +165,13 @@ export default function Question() {
 
   return (
     <div className="question-page">
-      <Navbar />
+      <Navbar badgeMessage={badgeMessage}/>
       <div className="math-community">
         <h1 className="page-title">Math Community Questions</h1>
 
         <div className="question-form">
           <h2>Ask a Question</h2>
+          {/* <h4>{badgeMessage}</h4> */}
           <form onSubmit={handleSubmit}>
             <input
               type="text"

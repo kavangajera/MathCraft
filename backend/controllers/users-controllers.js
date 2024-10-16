@@ -136,20 +136,29 @@ const isAuth = (req, res, next) => {
 
 
 const getCurrentUser = async (req, res, next) => {
-  // The user data should be attached to the request by your isAuth middleware
+  
   const userId = req.userData.userId;
 
   let user;
   try {
-    user = await User.findById(userId).select('-password');
-    if (!user) {
-      return next(new HttpError('User not found.', 404));
-    }
-    res.json({ user: user.toObject({ getters: true }) });
+     
+      user = await User.findById(userId).populate('badgeId', 'position description').select('-password');
+      
+      if (!user) {
+          return next(new HttpError('User not found.', 404));
+      }
+
+      
+      const position = user.badgeId ? user.badgeId.position : null;
+
+      res.json({ 
+          user: user.toObject({ getters: true })
+      });
   } catch (err) {
-    return next(new HttpError('Fetching user failed, please try again later.', 500));
+      return next(new HttpError('Fetching user failed, please try again later.', 500));
   }
 };
+
 
 const updatePassword = async (req, res, next) => {
   const { userId } = req.params; // Assuming the user ID is passed in the URL

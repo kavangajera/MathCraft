@@ -61,37 +61,53 @@ mongoose
   });
 
 
-//Sockets start..................
+// Sockets start..................
+const users = {}; // Object to store connected users
 
 const server = createServer(app);
-const io = new Server(server,{
-  cors:{
-    origin:"http://localhost:3000",
-    credentials:true
-  }
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
 });
-io.on("connection",(socket)=>{
-  console.log("User connected !")
-  console.log("Id: ",socket.id);
 
-  socket.on("message",({message,room})=>{
-    console.log(room)
-    io.to(room).emit("receive-message",message)
-  })
+io.on("connection", (socket) => {
+  console.log("User connected!");
+  console.log("Id: ", socket.id);
 
-  socket.on("join-room",(room)=>{
-    socket.join(room)
-  })
+  // Event to handle user connection and storing the user data
+  socket.on("user-connected", (username) => {
+    users[socket.id] = username; // Save user with socket ID
+    io.emit("update-user-status", Object.values(users)); // Send updated users list to all clients
+    console.log(`${username} connected with ID: ${socket.id}`);
+    io.emit('update-user-status', Object.values(users));
+  });
 
-  // socket.broadcast.emit("welcome",`Welcome to the server: ${socket.id}`)
+  // Event for sending messages to a specific room
+  socket.on("message", ({ message, room, username, socketId }) => {
+    io.to(room).emit("receive-message", { message, username, socketId });
+  });
 
-  socket.on("disconnect",()=>{
-    console.log("Disconnected Id: ",socket.id);
-  })
-})
+  // Event to join a room
+  socket.on("join-room", ({room,username}) => {
+    socket.join(room);
+    console.log(`${users[socket.id]} joined room: ${room}`);
+    io.emit('room-activity', { username, room });
+  });
 
+  socket.on("room-created", (msg) => {
+    // Broadcast the room creation message to all clients
+    io.emit("room-created", msg);
+  });
 
-
+  // When a user disconnects, remove them from the users object
+  socket.on("disconnect", () => {
+    console.log("Disconnected Id: ", socket.id);
+    delete users[socket.id]; // Remove the user from the online list
+    io.emit("update-user-status", Object.values(users)); // Update the online users list for all clients
+  });
+});
 // Socket ends....................
 
   

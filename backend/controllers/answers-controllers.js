@@ -1,5 +1,4 @@
-const { validationResult } = require("express-validator");
-
+const Badge = require('../models/badge');
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 const Answer = require("../models/answer");
@@ -8,57 +7,67 @@ const cloudinary = require('cloudinary').v2;
 const Comment = require('../models/comment')
 // const get = async (req, res, next) => {};
 
-// const getAllAnswersOfUser = async (req, res, next) => {
-//   const username = req.params.username;
+const getAllAnswersOfUser = async (req, res, next) => {
+  const userId = req.userData.userId;
+  console.log("User ID:", userId);
 
-//   try {
-//     const user = await User.findOne({ username: username });
+  try {
+      // Find all answers by the user
+      const answers = await Answer.find({ userId: userId });
+      console.log("Answers:", answers);
 
-//     // Find all questions asked by the specific user...
-//     const userQuestions = await Question.find({ userId: user._id });
+      // Check if any answers were found
+      if (!answers.length) {
+          return res.json({ message: "No answers found for this user." });
+      }
 
-//     if (userQuestions.length === 0) {
-//       return res.json({ message: "This user has not asked any questions." });
-//     }
-  
-//     // list of questionId of userQuestions...
-//     const questionIds = userQuestions.map((question) => question._id);
+      // Initialize total_upvotes
+      let total_upvotes = 0;
 
-//     // Find all answers to those userQestions...
-//     const answers = await Answer.find({
-//       questionId: { $in: questionIds },
-//     });
+      // Calculate total upvotes from the retrieved answers
+      for (const answer of answers) {
+          total_upvotes += answer.upvotes - answer.downvotes;
+      }
 
-//     // Format the response
-//     const response = userQuestions.map((question) => ({
-//       questionId: question._id,
-//       question: question.question,
-//       answers: answers
-//         .filter(
-//           (answer) => answer.questionId.toString() === question._id.toString()
-//         )
-//         .map((answer) => ({
-//           userId: answer.userId,
-//           answer: answer.answer,
-//           upvotes: answer.upvotes,
-//           downvotes: answer.downvotes,
-//         })),
-//     }));
+      const user = await User.findById(userId).populate('badgeId', 'position');
+      if (!user) {
+          return next(new HttpError('User not found.', 404));
+      }
 
-//     res.json(response);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({
-//       message: "Failed to retrieve answers for the user's questions.",
-//     });
-//   }
-// };
+      const currentBadge = user.badgeId.position;
+      let updatedBadge = currentBadge; // Change to let
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+      console.log("Total Upvotes:", total_upvotes);
+      if (total_upvotes >= 0 && total_upvotes < 50) {
+          updatedBadge = "Beginner";
+      } else if (total_upvotes >= 50 && total_upvotes < 100) {
+          updatedBadge = 'Rookie';
+      } else if (total_upvotes >= 100 && total_upvotes < 300) {
+          updatedBadge = 'Intermediate';
+      } else {
+          updatedBadge = 'Expert';
+      }
+
+      if (updatedBadge !== currentBadge) {
+          const badgeObj = await Badge.findOne({ position: updatedBadge });
+          if (badgeObj) {
+              user.badgeId = badgeObj._id;
+              await user.save(); // Ensure to await the save operation
+          }
+      }
+
+      const msg = updatedBadge !== currentBadge 
+          ? `Promoted to ${updatedBadge}` 
+          : "No changes";
+
+      // Respond with a message
+      return res.json({ message: msg });
+  } catch (err) {
+      console.error(err); // Log the error for debugging
+      return next(new HttpError('Fetching answers failed, please try again later.', 500));
+  }
+};
+
 
 const answerTheQuestion = async (req, res, next) => {
   const { questionId } = req.params;
@@ -273,7 +282,7 @@ const downvoteAnswer = async (req, res, next) => {
 
 exports.upvoteAnswer = upvoteAnswer;
 exports.downvoteAnswer = downvoteAnswer;
-// exports.getAllAnswersOfUser = getAllAnswersOfUser;
+exports.getAllAnswersOfUser = getAllAnswersOfUser;
 exports.answerTheQuestion = answerTheQuestion;
 exports.deleteTheAnswer = deleteTheAnswer;
 exports.getAllAnswersOfQuestion = getAllAnswersOfQuestion

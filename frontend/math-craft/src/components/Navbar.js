@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation} from 'react-router-dom';
 import './Navbar.css'; 
 
-function Navbar() {
+function Navbar({badgeMessage}) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [isUpdated,setIsUpdated] = useState(false)
+  const location = useLocation();
+  
 
   useEffect(() => {
+    if(badgeMessage==="No changes"){
+      setIsUpdated(false)
+    }
+    else{
+      setIsUpdated(true)
+    }
     fetchUserData();
   }, []);
 
@@ -55,21 +64,32 @@ function Navbar() {
             <span className="navbar-title">MathCraft</span>
           </div>
           <div className="navbar-right">
+
+          <button
+              onClick={() => navigate('/math-tools')}
+              className="nav-button"
+              aria-label="MathTools"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="icon">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                <path d="M12 17h.01" />
+              </svg>
+              <span className="nav-label">MathTools</span>
+            </button>
+
             <button
-              onClick={() => navigate('/chats')}  // Correct navigate method
+              onClick={() => navigate('/chats')}
               className="nav-button"
               aria-label="Chat"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="icon">
-                <path d="M8 2h8a2 2 0 012 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V4a2 2 0 012-2z" />
-                <path d="M6 6h12" />
-                <path d="M6 10h12" />
-                <path d="M6 14h8" />
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               <span className="nav-label">Chat</span>
             </button>
             <button
-              onClick={() => navigate('/questions')}  // Correct navigate method
+              onClick={() => navigate('/questions')}
               className="nav-button"
               aria-label="Ask"
             >
@@ -81,7 +101,7 @@ function Navbar() {
               <span className="nav-label">Ask</span>
             </button>
             <button
-              onClick={() => navigate('/profile')}  // Correct navigate method
+              onClick={() => {navigate('/profile');setIsUpdated(false)}}
               className="nav-button"
               aria-label="Profile"
             >
@@ -98,6 +118,11 @@ function Navbar() {
                 </svg>
               )}
               <span className="nav-label">Profile</span>
+              {isUpdated && location.pathname !== '/profile' && (
+    <span className="notification-badge" aria-label="New Notifications">
+      ● 
+    </span>
+  )}
             </button>
             <button onClick={handleLogout} className="nav-button" aria-label="Logout">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="icon">

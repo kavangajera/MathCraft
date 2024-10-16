@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.math-chat {
+  max-width: 1200px;
+  margin: 80px auto 20px; /* Increased top margin to accommodate NavBar */
+  background-color: #f8fafc;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.chat-header {
+  background-color: #2563eb;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.chat-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  animation: slideIn 0.5s ease-out;
+}
+
+.chat-container {
+  display: flex;
+  height: calc(80vh - 80px); /* Adjusted height to account for NavBar */
+}
+
+.sidebar {
+  width: 30%;
+  background-color: #ffffff;
+  padding: 15px;
+  border-right: 1px solid #e2e8f0;
+  overflow-y: auto;
+}
+
+.chat-main {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #edf2f7;
+}
+
+.message {
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  max-width: 70%;
+  word-wrap: break-word;
+  animation: slideIn 0.3s ease-out;
+  clear: both;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.message.received {
+  background-color: #ffffff;
+  float: left;
+  border-bottom-left-radius: 4px;
+}
+
+.message.sent {
+  background-color: #2563eb;
+  color: #ffffff;
+  float: right;
+  border-bottom-right-radius: 4px;
+}
+
+.message p {
+  margin: 4px 0 0;
+  font-family: 'Courier New', monospace;
+  line-height: 1.3;
+}
+
+.username {
+  font-size: 0.8em;
+  color: #64748b;
+  margin-bottom: 4px;
+  display: block;
+  font-weight: 600;
+}
+
+.message.sent .username {
+  color: #e2e8f0;
+}
+
+.no-messages {
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+input {
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+button {
+  padding: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  font-weight: 600;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.message-form {
+  display: flex;
+  padding: 15px;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.message-form input {
+  flex-grow: 1;
+  margin-right: 8px;
+}
+
+.online-users, .room-messages {
+  margin-top: 15px;
+}
+
+.online-users h3, .room-messages h3 {
+  margin-bottom: 8px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.online-users ul, .room-messages ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.online-users li, .room-messages li {
+  padding: 6px 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.math-keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 12px;
+  background-color: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+}
+
+.math-keyboard button {
+  margin: 4px;
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.math-keyboard button:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .math-chat {
+    margin-top: 60px; /* Adjusted for smaller screens */
+  }
+
+  .chat-container {
+    flex-direction: column;
+    height: calc(90vh - 60px); /* Adjusted for smaller screens */
+  }
+
+  .sidebar, .chat-main {
+    width: 100%;
+  }
+
+  .sidebar {
+    order: 2;
+    border-right: none;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .chat-main {
+    order: 1;
+  }
+}

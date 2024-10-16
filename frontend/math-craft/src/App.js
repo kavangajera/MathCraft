@@ -12,9 +12,12 @@ import Layout from './components/Layout';  // Creating a layout component
 import Answer from './pages/Answer'
 import EditProfile from './pages/EditProfile'
 import ForgetPassword from './pages/ForgetPassword'
-
+import MathTools from './pages/MathTools'
 
 function App() {
+
+  
+
   return (
     <>
       <Helmet>
@@ -33,10 +36,11 @@ function App() {
           
           {/* Protected Routes with Layout (Navbar + content) */}
           <Route element={<ProtectedRoute />}>
-            <Route element={<Layout />}>
+            <Route element={<Layout/>}>
               <Route path="profile" element={<Profile />} />
+              <Route path="math-tools" element={<MathTools/>}></Route>
               <Route path="answer/:questionId" element={<Answer />}/>
-              <Route path="questions" element={<Question />} />
+              <Route path="questions" element={<Question/>} />
               <Route path="chats" element={<Chat />} />
               <Route path="edit-profile" element={<EditProfile />}></Route>
             </Route>
