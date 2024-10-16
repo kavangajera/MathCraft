@@ -10,6 +10,10 @@ import Chat from './components/Chat';
 import { Helmet } from "react-helmet";
 import Layout from './components/Layout';  // Creating a layout component
 import Answer from './pages/Answer'
+import EditProfile from './pages/EditProfile'
+import ForgetPassword from './pages/ForgetPassword'
+
+
 function App() {
   return (
     <>
@@ -24,6 +28,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forget-password" element={<ForgetPassword />}></Route>
           <Route path="/" element={<Home />} />
           
           {/* Protected Routes with Layout (Navbar + content) */}
@@ -33,6 +38,7 @@ function App() {
               <Route path="answer/:questionId" element={<Answer />}/>
               <Route path="questions" element={<Question />} />
               <Route path="chats" element={<Chat />} />
+              <Route path="edit-profile" element={<EditProfile />}></Route>
             </Route>
           </Route>
         </Routes>

@@ -8,8 +8,8 @@ const router = express.Router()
 // router.get('/:username/', answerController.getAllAnswersOfUser);
 router.get('/:questionId',answerController.getAllAnswersOfQuestion);
 router.post('/:questionId',userController.isAuth, answerController.answerTheQuestion);
-router.delete('/:answerId', answerController.deleteTheAnswer)
-router.patch('/:answerId/upvote', answerController.upvoteAnswer);
-router.patch('/:answerId/downvote', answerController.downvoteAnswer);
+router.delete('/delete/:answerId', userController.isAuth,answerController.deleteTheAnswer)
+router.patch('/:answerId/upvote',userController.isAuth,answerController.upvoteAnswer);
+router.patch('/:answerId/downvote', userController.isAuth,answerController.downvoteAnswer);
 
 module.exports = router

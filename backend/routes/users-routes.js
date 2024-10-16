@@ -7,8 +7,11 @@ const router = express.Router()
 const basicAuthMiddleware = require('../controllers/auth-controller');
 const { isAuth } = require('../controllers/users-controllers');
 router.get('/', userController.getUsers);
+const multer = require('multer');
 
-
+const upload = multer({
+    limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB (adjust as needed)
+});
 
 router.post(
     '/signup',
@@ -37,7 +40,8 @@ router.post(
     signupController.signup
   );
 
-router.patch('/edit/:userId/:Name',basicAuthMiddleware.basicAuthMiddleware,userController.editName);
+router.patch("/edit-name/:userId/:Name", userController.editName);
+
 
 router.post('/login',userController.login);
 
@@ -49,6 +53,27 @@ router.get('/check-auth', isAuth, (req, res) => {
     res.status(200).json({ message: 'Authenticated' });
   });
 
+  router.patch(
+    "/:userId/update-password",
+    [
+      check("currentPassword")
+        .not()
+        .isEmpty()
+        .withMessage("Current password is required"),
+      check("newPassword")
+        .isLength({ min: 8 })
+        .withMessage("New password must be at least 8 characters long"),
+    ],
+    userController.updatePassword
+  );
+  
+  router.post("/send-otp", userController.sendOtpEmail);
+  
+  router.post("/verify-otp", userController.verifyOtp);
+  
+  router.post("/reset-password", userController.resetPassword);
+
+  router.patch("/:userId/update-photo",upload.single('profilePhoto'),userController.editPhoto)
 
 
 module.exports = router;

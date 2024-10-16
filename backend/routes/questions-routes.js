@@ -5,7 +5,7 @@ const questionController = require('../controllers/questions-controllers');
 const router = express.Router();
 
 router.get('/', questionController.getQuestions);
-router.get('/question/:id', questionController.getQuestionById);
+router.get('/:id', questionController.getQuestionById);
 router.get('/:username/', questionController.getUserQuestions);
 
 router.post('/:username/', questionController.createUserQuestion)

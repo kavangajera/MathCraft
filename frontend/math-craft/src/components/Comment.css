@@ -1,0 +1,30 @@
+/* Comment.css */
+.comment-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f9f9f9; /* Light background for contrast */
+  }
+  
+  .comment-content {
+    font-size: 16px;
+    color: #333; /* Darker text color */
+    margin: 5px 0;
+  }
+  
+  .comment-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #666; /* Lighter color for metadata */
+  }
+  
+  .comment-user {
+    font-weight: bold;
+  }
+  
+  .comment-date {
+    font-style: italic;
+  }
+  

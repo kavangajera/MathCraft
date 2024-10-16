@@ -7,54 +7,54 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [profilePhoto, setProfilePhoto] = useState(null); // State to store the selected file
+  const [imageBase64, setImageBase64] = useState(null); // Base64 for the profile photo
+  const [previewPhoto, setPreviewPhoto] = useState(null); // For displaying the photo preview
+
   const navigate = useNavigate();
 
-  // Function to convert the file to a base64 string
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  // Function to handle image upload and convert to base64
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]; // Get the selected file
+    const reader = new FileReader(); // FileReader to read the file content
 
-  const handleFileChange = (e) => {
-    setProfilePhoto(e.target.files[0]); // Store the selected file
+    if (file) {
+      reader.readAsDataURL(file); // Convert to base64
+      reader.onloadend = () => {
+        setImageBase64(reader.result); // Save the base64 encoded image
+        setPreviewPhoto(reader.result); // Set preview to display it
+      };
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Convert the profile photo to a base64 string
-    let profilePhotoBase64 = null;
-    if (profilePhoto) {
-      profilePhotoBase64 = await fileToBase64(profilePhoto);
-    }
-
-    // Create the data object
     const userData = {
       username,
       email,
       password,
       full_name: fullName,
-      profile_photo: profilePhotoBase64, // Include the base64 image
+      profile_photo: imageBase64, // Send the base64 encoded image
     };
 
     try {
       const response = await axios.post(
         'http://localhost:5000/api/user/signup',
-        userData, // Send the data as JSON
+        userData, // Send the data as JSON, including the image in base64 format
         { withCredentials: true }
       );
       alert(response.data.message);
       navigate('/login');
     } catch (error) {
-      // Logging the error response to debug
-      console.error(error.response?.data?.errors || error.response?.data?.message || error.message);
-      alert(error.response?.data?.message || 'Signup failed');
+      console.error('Full error object:', error);  // Log the full error object
+    
+      // Try to access the error details safely
+      const errorMessage = error.response?.data?.errors || error.response?.data?.message || error.message;
+    
+      console.error('Error message:', errorMessage);  // Log the error message extracted
+      alert(errorMessage || 'Signup failed');  // Show user-friendly error
     }
+    
   };
 
   return (
@@ -90,20 +90,28 @@ const SignUp = () => {
             onChange={(e) => setFullName(e.target.value)}
             style={styles.input}
           />
-          <input 
-            type="file" 
-            accept="image/*" 
-            onChange={handleFileChange} 
-            style={styles.inputFile} 
-          />
+
+          {/* Custom file upload button */}
+          <div className="image-upload">
+            <label htmlFor="image-upload" className="custom-file-upload">
+              Upload Profile Photo
+            </label>
+            <input id="image-upload" type="file" onChange={handleImageUpload} accept="image/*" style={styles.fileInput} />
+            {previewPhoto && (
+              <img
+                src={previewPhoto}
+                alt="Profile Preview"
+                style={styles.imagePreview}
+              />
+            )}
+          </div>
+
           <button type="submit" style={styles.button}>Signup</button>
         </form>
       </div>
     </div>
   );
 };
-
-
 
 const styles = {
   container: {
@@ -142,10 +150,17 @@ const styles = {
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
     outline: 'none',
     transition: 'all 0.3s ease',
-    ':focus': {
-      borderColor: '#4a90e2',
-      boxShadow: '0 0 8px rgba(74, 144, 226, 0.8)',
-    },
+  },
+  fileInput: {
+    display: 'none', // Hidden file input
+  },
+  imagePreview: {
+    width: '150px',
+    height: '150px',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    marginBottom: '10px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   button: {
     padding: '12px 24px',
@@ -156,22 +171,7 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    ':hover': {
-      backgroundColor: '#357abd',
-      transform: 'translateY(-2px)',
-      boxShadow: '0 6px 8px rgba(0, 0, 0, 0.15)',
-    },
-  },
-  '@keyframes fadeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
-  ':hover': {
-    transform: 'scale(1.05)',
   },
 };
 
 export default SignUp;
-
-

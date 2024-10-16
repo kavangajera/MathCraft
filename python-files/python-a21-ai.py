@@ -37,7 +37,7 @@ def classify_question():
     data = request.json
     question = data['question']
     
-    prompt = f"Question -> {question} . What is category of this question from Logarithms,Geometry,Polynomials,Calculus,Trigonometry,Complex Number,Relation & Functions and Matrix . Give me one word answer"
+    prompt = f"Question -> {question} . What is category of this question from Logarithms,Geometry,Statistics,Probability,Polynomials,Calculus,Trigonometry,Complex Number,Relation & Functions and Matrix . Give me one word answer"
     
     category = single_message_instruct(prompt)
     

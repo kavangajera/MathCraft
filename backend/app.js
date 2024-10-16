@@ -12,24 +12,6 @@ const cookieParser = require('cookie-parser');
 const {Server} = require('socket.io');
 const {createServer} = require('http')
 const bodyParser = require('body-parser');
-//Sockets
-
-const server = createServer(app);
-const io = new Server(server,{
-  cors:{
-    origin:"http://localhost:3000",
-    methods:["GET","POST"],
-    credentials:true
-  }
-});
-io.on("connection",(socket)=>{
-  console.log("User connected !")
-  console.log("Id: ",socket.id);
-})
-
-
-
-// Socket ends
 
 
 app.use(express.json());
@@ -51,7 +33,7 @@ app.get('/test-cookies', (req, res) => {
   res.json({ cookies: req.cookies });
 });
 
-app.use((req, res, next) => {
+app.use(() => {
   const error = new HttpError("Could not find this route.", 404);
   throw error;
 });
@@ -64,6 +46,7 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
+app.use(express.json({ limit: '10mb' }));
 //You can replace local server uri with MongoDB Atlas connection link
 mongoose
   .connect(
@@ -76,5 +59,39 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+
+//Sockets start..................
+
+const server = createServer(app);
+const io = new Server(server,{
+  cors:{
+    origin:"http://localhost:3000",
+    credentials:true
+  }
+});
+io.on("connection",(socket)=>{
+  console.log("User connected !")
+  console.log("Id: ",socket.id);
+
+  socket.on("message",({message,room})=>{
+    console.log(room)
+    io.to(room).emit("receive-message",message)
+  })
+
+  socket.on("join-room",(room)=>{
+    socket.join(room)
+  })
+
+  // socket.broadcast.emit("welcome",`Welcome to the server: ${socket.id}`)
+
+  socket.on("disconnect",()=>{
+    console.log("Disconnected Id: ",socket.id);
+  })
+})
+
+
+
+// Socket ends....................
 
   

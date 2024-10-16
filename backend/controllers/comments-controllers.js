@@ -9,27 +9,22 @@ const Comment = require("../models/comment");
 
 const getComments = async (req, res, next) => {
   const answerId = req.params.answerId;
-  console.log(answerId);
 
   try {
-    // find all comments on specified answerId...
-    const comments = await Comment.find({ answerId: answerId });
-    // console.log(comments)
+    // Fetch comments and populate the userId with the username from the User model
+    const comments = await Comment.find({ answerId: answerId }).populate('userId', 'username');
 
-    // find answer...
     const answer = await Answer.findOne({ _id: answerId });
-    console.log(answer);
-
-    // find the question...
     const question = await Question.findOne({ _id: answer.questionId });
-    console.log(question);
 
+    // Prepare response with usernames
     const response = {
       questionId: question._id,
       answer: answer.answer,
       comments: comments.map((comment) => ({
-        userId: comment.userId,
+        username: comment.userId.username,  // Get the username instead of userId
         content: comment.content,
+        createdAt: comment.createdAt
       })),
     };
 
@@ -43,37 +38,17 @@ const getComments = async (req, res, next) => {
   }
 };
 
+
 const postComments = async (req, res, next) => {
   const { answerId } = req.params;
-  const { username, password, content } = req.body;
+  const { content } = req.body;
 
   try {
     // Find the user by username
-    const user = await User.findOne({ username: username, password: password });
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Authentication failed. User not found." });
-    }
-
-    // // Check if the provided password is correct
-    // const isPasswordValid = await bcrypt.compare(password, user.password);
-    // if (!isPasswordValid) {
-    //   return res
-    //     .status(401)
-    //     .json({ message: "Authentication failed. Incorrect password." });
-    // }
-
-    // Find the answer by answerId
-    const answer = await Answer.findById(answerId);
-    if (!answer) {
-      return res.status(404).json({ message: "Answer not found." });
-    }
-
-    // Create a new comment
+    const uid = req.userData.userId;
     const newComment = new Comment({
       answerId: answerId,
-      userId: user._id,
+      userId: uid,
       content: content,
       createdAt: new Date(),
       updatedAt: new Date()

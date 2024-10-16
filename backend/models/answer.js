@@ -11,7 +11,10 @@ const answerSchema = new Schema({
     updatedAt: { type: Date },
     upvotes: { type: Number, default: 0 },
     downvotes: { type: Number, default: 0 },
+    upvotedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    downvotedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     verifiedByExpert: { type: Boolean, default: false },
+    image: { type: String },
 })
 
 const Answer = mongoose.model("answers", answerSchema)

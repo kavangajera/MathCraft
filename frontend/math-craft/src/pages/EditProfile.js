@@ -1,0 +1,285 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const EditProfile = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [newName, setNewName] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [photoSuccessMessage, setPhotoSuccessMessage] = useState('');
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/user/current', {
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        setNewName(data.user.full_name);
+      } else {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      navigate('/login');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNameChange = (e) => {
+    setNewName(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    if (e.target.id === 'currentPassword') {
+      setCurrentPassword(e.target.value);
+    } else {
+      setNewPassword(e.target.value);
+    }
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePhoto(file); // Keep the File object instead of base64
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL to preview
+    }
+  };
+
+  const handleNameSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    // Update full name
+    try {
+      const response = await fetch(`http://localhost:5000/api/user/edit-name/${user.id}/${newName}`, {
+        method: 'PATCH',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        setErrorMessage('Failed to update name.');
+      } else {
+        setSuccessMessage('Name updated successfully!');
+      }
+    } catch (error) {
+      console.error('Error updating name:', error);
+      setErrorMessage('Error updating name.');
+    }
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+
+    // Update password
+    if (currentPassword && newPassword) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/user/${user.id}/update-password`, {
+          method: 'PATCH',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ currentPassword, newPassword }),
+        });
+
+        if (!response.ok) {
+          setErrorMessage('Failed to update password.');
+        } else {
+          setSuccessMessage('Password updated successfully!');
+          setCurrentPassword('');
+          setNewPassword('');
+        }
+      } catch (error) {
+        console.error('Error updating password:', error);
+        setErrorMessage('Error updating password.');
+      }
+    } else {
+      setErrorMessage('Please fill in all fields for password update.');
+    }
+  };
+
+  const handlePhotoSubmit = async (e) => {
+    e.preventDefault();
+    setPhotoSuccessMessage('');
+    setErrorMessage('');
+
+    if (!profilePhoto) {
+        setErrorMessage('Please select a photo to upload.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('profilePhoto', profilePhoto); // Append the file directly
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/user/${user.id}/update-photo`, {
+            method: 'PATCH',
+            credentials: 'include',
+            body: formData, // Send the FormData directly
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            setErrorMessage(`Failed to update profile photo: ${response.status} ${errorText}`);
+            return;
+        }
+
+        setPhotoSuccessMessage('Profile photo updated successfully!');
+        setProfilePhoto(null); // Reset the file input
+    } catch (error) {
+        console.error('Error updating profile photo:', error);
+        setErrorMessage('Error updating profile photo. Please check your network connection or try again later.');
+    }
+};
+
+
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="edit-profile-container">
+      <h1 className="edit-profile-title">Edit Profile</h1>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {photoSuccessMessage && <p className="success-message">{photoSuccessMessage}</p>}
+      
+      {/* Current Profile Photo */}
+      {user && user.profilePhoto && (
+        <div>
+          <img src={user.profilePhoto} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+        </div>
+      )}
+      
+      {/* Change Profile Photo Form */}
+      <form onSubmit={handlePhotoSubmit} className="edit-profile-form">
+        <h2>Change Profile Photo</h2>
+        <div className="form-group">
+          <label htmlFor="profilePhoto">Select Photo</label>
+          <input
+            type="file"
+            id="profilePhoto"
+            accept="image/*"
+            onChange={handlePhotoChange}
+            className="form-input"
+          />
+        </div>
+        <button type="submit" className="save-button">Upload Photo</button>
+      </form>
+
+      {/* Change Full Name Form */}
+      <form onSubmit={handleNameSubmit} className="edit-profile-form">
+        <h2>Change Full Name</h2>
+        <div className="form-group">
+          <label htmlFor="name">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            value={newName}
+            onChange={handleNameChange}
+            className="form-input"
+          />
+        </div>
+        <button type="submit" className="save-button">Save Changes</button>
+      </form>
+      
+      {/* Change Password Form */}
+      <form onSubmit={handlePasswordSubmit} className="edit-profile-form">
+        <h2>Change Password</h2>
+        <div className="form-group">
+          <label htmlFor="currentPassword">Current Password</label>
+          <input
+            type="password"
+            id="currentPassword"
+            value={currentPassword}
+            onChange={handlePasswordChange}
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="newPassword">New Password</label>
+          <input
+            type="password"
+            id="newPassword"
+            value={newPassword}
+            onChange={handlePasswordChange}
+            className="form-input"
+          />
+        </div>
+        <button type="submit" className="save-button">Update Password</button>
+      </form>
+      
+      <button type="button" onClick={() => navigate('/profile')} className="cancel-button">Cancel</button>
+      
+      <style jsx>{`
+        .edit-profile-container {
+          max-width: 600px;
+          margin: 80px auto 0;
+          padding: 20px;
+          font-family: Arial, sans-serif;
+        }
+        .edit-profile-title {
+          color: #3498db;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        .edit-profile-form {
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          margin-bottom: 20px;
+        }
+        .form-group {
+          margin-bottom: 20px;
+        }
+        .form-input {
+          width: 100%;
+          padding: 10px;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          margin-top: 5px;
+        }
+        .save-button, .cancel-button {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+        }
+        .save-button:hover, .cancel-button:hover {
+          background-color: #2980b9;
+        }
+        .error-message {
+          color: red;
+        }
+        .success-message {
+          color: green;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default EditProfile;
