@@ -17,7 +17,7 @@ body {
 }
 
 .chat-header {
-  background-color: #2563eb;
+  background-color: #3498db;
   color: white;
   padding: 15px;
   text-align: center;
@@ -37,7 +37,7 @@ body {
 
 .sidebar {
   width: 30%;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   padding: 15px;
   border-right: 1px solid #e2e8f0;
   overflow-y: auto;
@@ -74,7 +74,7 @@ body {
 }
 
 .message.sent {
-  background-color: #2563eb;
+  background-color: #3498db;
   color: #ffffff;
   float: right;
   border-bottom-right-radius: 4px;
@@ -121,12 +121,12 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #3498db;
 }
 
 button {
   padding: 10px;
-  background-color: #2563eb;
+  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 6px;
@@ -136,7 +136,7 @@ button {
 }
 
 button:hover {
-  background-color: #1d4ed8;
+  background-color: #2980b9;
   transform: translateY(-1px);
 }
 
@@ -162,7 +162,7 @@ button:active {
 
 .online-users h3, .room-messages h3 {
   margin-bottom: 8px;
-  color: #2563eb;
+  color: #2980b9;
   font-weight: 600;
 }
 
@@ -191,7 +191,7 @@ button:active {
   margin: 4px;
   padding: 8px 12px;
   font-size: 16px;
-  background-color: #2563eb;
+  background-color: #2980b9;
   color: white;
   border: none;
   border-radius: 6px;
@@ -200,7 +200,7 @@ button:active {
 }
 
 .math-keyboard button:hover {
-  background-color: #1d4ed8;
+  background-color: #2980b9;
   transform: scale(1.05);
 }
 
@@ -238,3 +238,46 @@ button:active {
     order: 1;
   }
 }
+
+.badge {
+  background-color: #f39c12; /* Example badge color */
+  color: white;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  margin-left: 10px;
+}
+/* Common badge styling */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 15px;
+  margin-left: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Beginner badge styling */
+.beginner-badge {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+/* Rookie badge styling */
+.rookie-badge {
+  background-color: #ffc107; /* Yellow */
+  color: black;
+}
+
+/* Intermediate badge styling */
+.intermediate-badge {
+  background-color: #fd7e14; /* Orange */
+  color: white;
+}
+
+/* Expert badge styling */
+.expert-badge {
+  background-color: #dc3545; /* Red */
+  color: white;
+}
+

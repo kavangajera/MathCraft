@@ -164,3 +164,19 @@
 .navbar:hover .navbar-wave {
   animation: wave 1s linear infinite, pulse 2s ease-in-out infinite;
 }
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff4081;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}

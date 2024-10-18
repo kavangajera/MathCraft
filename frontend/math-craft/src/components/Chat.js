@@ -10,8 +10,9 @@ const MathChat = () => {
   const [chats, setChats] = useState([]);
   const [roomName, setRoomName] = useState("");
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState("");
   const [roomMessages, setRoomMessages] = useState([]);
+  const [error, setError] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -32,39 +33,49 @@ const MathChat = () => {
       setRoomMessages((prevMessages) => [...prevMessages, data]);
     });
 
+    fetchCurrentUser();
     return () => {
       socket.disconnect();
     };
   }, [socket]);
 
   useEffect(() => {
-    if (username) {
-      socket.emit("user-connected", username);
+    if (currentUser && currentUser.username) {
+      socket.emit("user-connected", { username: currentUser.username, badgeId: currentUser.badgeId });
     }
-  }, [username, socket]);
-
+  }, [currentUser, socket]);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (message.trim() && room.trim()) {
-      const newMessage = { message, room, username, socketId: socket.id };
+      const newMessage = {
+        message,
+        room,
+        username: currentUser.username,
+        socketId: socket.id,
+      };
       socket.emit("message", newMessage);
       setMessage("");
+    }
+  };
+
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/user/current", {
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setCurrentUser(data.user);
+    } catch (err) {
+      setError(`Failed to load user: ${err.message}`);
     }
   };
 
   const handleRoomSubmit = (e) => {
     e.preventDefault();
     if (roomName.trim()) {
-      socket.emit("join-room", { room: roomName, username });
+      socket.emit("join-room", { room: roomName, username: currentUser.username });
       setRoom(roomName);
       setRoomName("");
-    }
-  };
-
-  const handleUsernameSubmit = (e) => {
-    e.preventDefault();
-    if (username.trim()) {
-      socket.emit("user-connected", username);
     }
   };
 
@@ -76,24 +87,14 @@ const MathChat = () => {
     <div className="math-chat">
       <header className="chat-header">
         <h1>Instant MathChat</h1>
-        
       </header>
 
       <div className="chat-container">
         <div className="sidebar">
-          <div className="user-form">
-            <form onSubmit={handleUsernameSubmit}>
-              <input
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <button type="submit">Set Username</button>
-            </form>
-          </div>
-
           <div className="room-form">
+            <h5>Create or Join Room to start instant chat</h5>
             <form onSubmit={handleRoomSubmit}>
+              
               <input
                 placeholder="Room Name"
                 value={roomName}
@@ -106,12 +107,44 @@ const MathChat = () => {
           <div className="online-users">
             <h3>Online Users</h3>
             <ul>
-              {users.length > 0 ? (
-                users.map((user, index) => <li key={index}>{user}</li>)
-              ) : (
-                <li>No users online</li>
-              )}
-            </ul>
+    {users.length > 0 ? (
+      users.map((user, index) => {
+        let badgeSymbol = "";
+        let badgeClass = "";
+
+        // Assign symbols and classes based on badge position
+        switch (user.badgeId ? user.badgeId.position : "") {
+          case "Beginner":
+            badgeSymbol = "🌱";
+            badgeClass = "beginner-badge";
+            break;
+          case "Rookie":
+            badgeSymbol = "🪖";
+            badgeClass = "rookie-badge";
+            break;
+          case "Intermediate":
+            badgeSymbol = "🎖️";
+            badgeClass = "intermediate-badge";
+            break;
+          case "Expert":
+            badgeSymbol = "⭐";
+            badgeClass = "expert-badge";
+            break;
+          default:
+            break;
+        }
+
+        return (
+          <li key={index}>
+            <span>{user.username}</span>
+            <span className={`badge ${badgeClass}`}>{badgeSymbol} {user.badgeId?.position}</span>
+          </li>
+        );
+      })
+    ) : (
+      <li>No users online</li>
+    )}
+  </ul>
           </div>
 
           <div className="room-messages">
@@ -128,8 +161,8 @@ const MathChat = () => {
           <div className="chat-messages">
             {chats.length > 0 ? (
               chats.map((chat, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`message ${chat.socketId === socket.id ? 'sent' : 'received'}`}
                 >
                   <span className="username">{chat.username}</span>

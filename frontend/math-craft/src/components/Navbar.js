@@ -1,23 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate ,useLocation} from 'react-router-dom';
-import './Navbar.css'; 
+import { useNavigate, useLocation } from 'react-router-dom';
+import './Navbar.css';
 
-function Navbar({badgeMessage}) {
+function Navbar({ badgeMessage , onProfileClick }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [isUpdated,setIsUpdated] = useState(false)
+  const [isUpdated, setIsUpdated] = useState(false);
   const location = useLocation();
-  
+  const [hasViewedProfile, setHasViewedProfile] = useState(false);
 
   useEffect(() => {
-    if(badgeMessage==="No changes"){
-      setIsUpdated(false)
+    // Reset hasViewedProfile when new badgeMessage comes in
+    if (badgeMessage !== 'No changes') {
+      setHasViewedProfile(false);
     }
-    else{
-      setIsUpdated(true)
-    }
+    
+    const shouldShowNotification = 
+      badgeMessage && 
+      badgeMessage.trim() !== '' && 
+      badgeMessage !== 'No changes' &&
+      !hasViewedProfile;  // Only show if profile hasn't been viewed
+      
+    setIsUpdated(shouldShowNotification);
     fetchUserData();
-  }, []);
+  }, [badgeMessage, hasViewedProfile]);
+
+  const handleProfileClick = () => {
+    if (onProfileClick) {
+      onProfileClick();
+    } // Call the passed handler if it exists
+    console.log(badgeMessage)
+    navigate('/profile');
+    setIsUpdated(false);
+  };
 
   const fetchUserData = async () => {
     try {
@@ -42,7 +57,7 @@ function Navbar({badgeMessage}) {
 
       if (response.ok) {
         setUser(null);
-        navigate('/'); // Navigate to the home page
+        navigate('/');
       } else {
         console.error('Failed to log out');
       }
@@ -52,7 +67,7 @@ function Navbar({badgeMessage}) {
   };
 
   if (!user) {
-    return null; // Don't render the navbar if the user is not logged in
+    return null;
   }
 
   return (
@@ -64,16 +79,13 @@ function Navbar({badgeMessage}) {
             <span className="navbar-title">MathCraft</span>
           </div>
           <div className="navbar-right">
-
-          <button
+            <button
               onClick={() => navigate('/math-tools')}
               className="nav-button"
               aria-label="MathTools"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="icon">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
-                <path d="M12 17h.01" />
+                <path d="M22 16.7L15.3 10l6.7-6.7L22 3l-7 7-7-7-0.3 0.3L14.4 10l-6.7 6.7L8 17l7-7 7 7z" />
               </svg>
               <span className="nav-label">MathTools</span>
             </button>
@@ -101,7 +113,7 @@ function Navbar({badgeMessage}) {
               <span className="nav-label">Ask</span>
             </button>
             <button
-              onClick={() => {navigate('/profile');setIsUpdated(false)}}
+              onClick={handleProfileClick}
               className="nav-button"
               aria-label="Profile"
             >
@@ -119,10 +131,10 @@ function Navbar({badgeMessage}) {
               )}
               <span className="nav-label">Profile</span>
               {isUpdated && location.pathname !== '/profile' && (
-    <span className="notification-badge" aria-label="New Notifications">
-      ● 
-    </span>
-  )}
+                <span className="notification-badge" aria-label="New Notifications">
+                  ∞
+                </span>
+              )}
             </button>
             <button onClick={handleLogout} className="nav-button" aria-label="Logout">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="icon">

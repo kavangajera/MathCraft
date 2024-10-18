@@ -37,7 +37,7 @@ const signup = async (req, res, next) => {
     return next(new HttpError('User exists already, please login instead.', 422));
   }
 
-  const badgeObj = await Badge.findOne({ position: 'Rookie' });
+  const badgeObj = await Badge.findOne({ position: 'Beginner' });
 
   const salt = bcrypt.genSaltSync(10);
   const hashPassword = bcrypt.hashSync(password, salt);

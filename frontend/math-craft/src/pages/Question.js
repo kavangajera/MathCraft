@@ -17,7 +17,10 @@ export default function Question() {
   const [message, setMessage] = useState('');
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
   const [searchQuery, setSearchQuery] = useState(''); // New state for search query
-  const [badgeMessage, setBadgeMessage] = useState('');
+  const [badgeMessage, setBadgeMessage] = useState(() => {
+    // Initialize from localStorage if available
+    return localStorage.getItem('badgeMessage') || 'No changes';
+  });
 
 
   useEffect(() => {
@@ -27,6 +30,10 @@ export default function Question() {
     fetchBadgeUpdate();
     fetchQuestions();
     fetchCurrentUser();
+
+    if (!localStorage.getItem('badgeMessage')) {
+      fetchBadgeUpdate();
+    }
 
     return () => clearTimeout(timer);
   }, []);
@@ -41,9 +48,15 @@ export default function Question() {
       if (data.message) {
         setBadgeMessage(data.message); // Set badge update message
       }
+      localStorage.setItem('badgeMessage', data.message);
     } catch (err) {
       console.error('Failed to fetch badge update:', err);
     }
+  };
+
+  const clearBadgeMessage = () => {
+    setBadgeMessage('No changes');
+    localStorage.setItem('badgeMessage', 'No changes');
   };
 
   const fetchQuestions = async () => {
@@ -134,6 +147,9 @@ export default function Question() {
       if (!response.ok) {
         throw new Error('Failed to add question');
       }
+      if(category==="Error"){
+        throw new Error('Enter valid mathematics question!')
+      }
       setNewQuestion('');
       fetchQuestions();
       setMessage(`Your question has been added to ${category}`);
@@ -165,7 +181,8 @@ export default function Question() {
 
   return (
     <div className="question-page">
-      <Navbar badgeMessage={badgeMessage}/>
+      <Navbar badgeMessage={badgeMessage} 
+        onProfileClick={clearBadgeMessage} />
       <div className="math-community">
         <h1 className="page-title">Math Community Questions</h1>
 

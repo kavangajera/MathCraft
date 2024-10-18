@@ -18,7 +18,7 @@ const getAllAnswersOfUser = async (req, res, next) => {
 
       // Check if any answers were found
       if (!answers.length) {
-          return res.json({ message: "No answers found for this user." });
+          return res.json({ message: "No changes" });
       }
 
       // Initialize total_upvotes

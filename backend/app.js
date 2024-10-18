@@ -77,11 +77,10 @@ io.on("connection", (socket) => {
   console.log("Id: ", socket.id);
 
   // Event to handle user connection and storing the user data
-  socket.on("user-connected", (username) => {
-    users[socket.id] = username; // Save user with socket ID
+  socket.on("user-connected", (user) => {
+    users[socket.id] = { username: user.username, badgeId: user.badgeId }; // Save user with badge info
     io.emit("update-user-status", Object.values(users)); // Send updated users list to all clients
-    console.log(`${username} connected with ID: ${socket.id}`);
-    io.emit('update-user-status', Object.values(users));
+    console.log(`${user.username} connected with ID: ${socket.id}, badge: ${user.badgeId.position}`);
   });
 
   // Event for sending messages to a specific room
