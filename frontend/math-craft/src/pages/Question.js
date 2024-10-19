@@ -123,7 +123,7 @@ export default function Question() {
     try {
       await new Promise(resolve => setTimeout(resolve, 2000)); // 2-second delay
 
-      const categoryResponse = await fetch('http://localhost:5001/classify', {
+      const categoryResponse = await fetch('https://a21-ai.vercel.app/classify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
