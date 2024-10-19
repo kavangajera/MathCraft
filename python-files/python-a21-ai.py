@@ -9,9 +9,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Load configuration
-with open('cred.json') as f:
-    config = json.load(f)
+
 
 # Initialize the AI21 client with the API key
 load_dotenv('../backend/.env')

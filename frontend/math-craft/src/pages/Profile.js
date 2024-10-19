@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import './Profile.css'
+import './Profile.css';
 import { baseUrl } from '../Urls';
-
 
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     fetchUserData();
+    
+    // Set a timeout to show content after 2 seconds
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const fetchUserData = async () => {
@@ -37,97 +43,84 @@ const Profile = () => {
   const getBadgeSymbol = (position) => {
     switch (position) {
       case 'Beginner':
-        return "🌱"; // Sparkle
+        return "🌱";
       case 'Rookie':
-        return "🪖"; // Star
+        return "🪖";
       case 'Intermediate':
-        return "🎖️"; // White Star
+        return "🎖️";
       case 'Expert':
-        return "⭐"; // Pinwheel Star
+        return "⭐";
       default:
         return '?';
     }
   };
 
-  if (loading) {
-    return React.createElement('div', { className: 'loading' }, 'Loading...');
+  if (loading || !showContent) {
+    return (
+      <div className="loading-container">
+        <div className="math-loading">
+          <span>∫</span>
+          <span>∑</span>
+          <span>∂</span>
+          <span>∞</span>
+        </div>
+      </div>
+    );
   }
 
   if (!user) {
-    return React.createElement('div', { className: 'error' }, 'Error loading profile. Please try again later.');
+    return <div className="error">Error loading profile. Please try again later.</div>;
   }
 
-  return React.createElement(
-    'div',
-    { className: 'profile-container' },
-    React.createElement(Navbar, null),
-    React.createElement(
-      'div',
-      { className: 'profile-content' },
-      React.createElement('h1', { className: 'profile-title' }, 'User Profile'),
-      React.createElement(
-        'div',
-        { className: 'profile-card' },
-        React.createElement(
-          'div',
-          { className: 'profile-header' },
-          React.createElement(
-            'div',
-            { className: 'profile-photo-container' },
-            user.profile_photo
-              ? React.createElement('img', { src: user.profile_photo, alt: 'Profile', className: 'profile-photo' })
-              : React.createElement(
-                  'div',
-                  { className: 'profile-photo-placeholder' },
-                  React.createElement(
-                    'svg',
-                    { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', className: 'placeholder-icon' },
-                    React.createElement('path', { d: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' }),
-                    React.createElement('circle', { cx: '12', cy: '7', r: '4' })
-                  )
-                )
-          ),
-          React.createElement('h2', { className: 'profile-name' }, user.full_name)
-        ),
-        React.createElement(
-          'div',
-          { className: 'profile-info' },
-          React.createElement(
-            'div',
-            { className: 'info-item' },
-            React.createElement('span', { className: 'info-label' }, 'Username:'),
-            React.createElement('span', { className: 'info-value' }, user.username)
-          ),
-          React.createElement(
-            'div',
-            { className: 'info-item' },
-            React.createElement('span', { className: 'info-label' }, 'Email:'),
-            React.createElement('span', { className: 'info-value' }, user.email)
-          ),
-          React.createElement(
-            'div',
-            { className: 'info-item' },
-            React.createElement('span', { className: 'info-label' }, 'Badge:'),
-            React.createElement(
-              'span',
-              { className: `info-value badge ${user.badgeId ? user.badgeId.position.toLowerCase() : ''}` },
-              user.badgeId
-                ? [
-                    React.createElement('span', { key: 'symbol', className: 'badge-symbol' }, getBadgeSymbol(user.badgeId.position)),
-                    ' ',
-                    user.badgeId.position
-                  ]
-                : 'No badge assigned'
-            )
-          )
-        ),
-        React.createElement(
-          'button',
-          { onClick: () => navigate('/edit-profile'), className: 'edit-profile-button' },
-          'Edit Profile'
-        )
-      )
-    )
+  return (
+    <div className="profile-container">
+      <Navbar />
+      <div className="profile-content">
+        <h1 className="profile-title">User Profile</h1>
+        <div className="profile-card">
+          <div className="profile-header">
+            <div className="profile-photo-container">
+              {user.profile_photo ? (
+                <img src={user.profile_photo} alt="Profile" className="profile-photo" />
+              ) : (
+                <div className="profile-photo-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="placeholder-icon">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+              )}
+            </div>
+            <h2 className="profile-name">{user.full_name}</h2>
+          </div>
+          <div className="profile-info">
+            <div className="info-item">
+              <span className="info-label">Username:</span>
+              <span className="info-value">{user.username}</span>
+            </div>
+            <div className="info-item">
+              <span className="info-label">Email:</span>
+              <span className="info-value">{user.email}</span>
+            </div>
+            <div className="info-item">
+              <span className="info-label">Badge:</span>
+              <span className={`info-value badge ${user.badgeId ? user.badgeId.position.toLowerCase() : ''}`}>
+                {user.badgeId ? (
+                  <>
+                    <span className="badge-symbol">{getBadgeSymbol(user.badgeId.position)}</span> {user.badgeId.position}
+                  </>
+                ) : (
+                  'No badge assigned'
+                )}
+              </span>
+            </div>
+          </div>
+          <button onClick={() => navigate('/edit-profile')} className="edit-profile-button">
+            Edit Profile
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
