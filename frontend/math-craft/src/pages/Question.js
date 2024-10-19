@@ -132,7 +132,9 @@ export default function Question() {
       });
       const categoryData = await categoryResponse.json();
       const category = categoryData.category;
-
+      if(category==="Error"){
+        throw new Error('Enter valid mathematics question!')
+      }
       const response = await fetch(`${baseUrl}/api/question/${currentUser.username}`, {
         method: 'POST',
         headers: {
@@ -147,9 +149,7 @@ export default function Question() {
       if (!response.ok) {
         throw new Error('Failed to add question');
       }
-      if(category==="Error"){
-        throw new Error('Enter valid mathematics question!')
-      }
+      
       setNewQuestion('');
       fetchQuestions();
       setMessage(`Your question has been added to ${category}`);

@@ -61,7 +61,7 @@ const createUserQuestion = async (req, res, next) => {
   const { question, category } = req.body;
   const username = req.params.username;
 
-  if(question==="Error"){
+  if(category==="Error"){
     return res.status(404).json({ error: "Enter valid Mathematics Question!!!" });
   }
 
