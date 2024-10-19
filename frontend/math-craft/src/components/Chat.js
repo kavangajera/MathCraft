@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
+import { baseUrl } from "../Urls";  
 import './Chat.css';
 
 const MathChat = () => {
-  const socket = useMemo(() => io("http://localhost:5000"), []);
+  const socket = useMemo(() => io(`${baseUrl}`), []);
   const [message, setMessage] = useState("");
   const [room, setRoom] = useState("");
   const [socketId, setSocketId] = useState("");
@@ -60,7 +61,7 @@ const MathChat = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/user/current", {
+      const response = await fetch(`${baseUrl}/api/user/current`, {
         credentials: 'include',
       });
       const data = await response.json();

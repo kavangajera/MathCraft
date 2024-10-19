@@ -73,6 +73,7 @@ const login = async (req, res, next) => {
   // Set token in cookie
   res.cookie('token', token, {
     httpOnly: true,
+    sameSite:'None',
     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
     maxAge: 3600000 // 1 hour
   });

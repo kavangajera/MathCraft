@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { baseUrl } from '../Urls';
 import './Navbar.css';
 
 function Navbar({ badgeMessage , onProfileClick }) {
@@ -36,7 +37,7 @@ function Navbar({ badgeMessage , onProfileClick }) {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/user/current', {
+      const response = await fetch(`${baseUrl}/api/user/current`, {
         credentials: 'include',
       });
       if (response.ok) {
@@ -50,7 +51,7 @@ function Navbar({ badgeMessage , onProfileClick }) {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/user/logout', {
+      const response = await fetch(`${baseUrl}/api/user/logout`, {
         method: 'POST',
         credentials: 'include',
       });

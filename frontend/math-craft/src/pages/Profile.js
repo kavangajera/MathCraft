@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './Profile.css'
+import { baseUrl } from '../Urls';
+
+
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     fetchUserData();
@@ -13,7 +17,7 @@ const Profile = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/user/current', {
+      const response = await fetch(`${baseUrl}/api/user/current`, {
         credentials: 'include',
       });
       if (response.ok) {

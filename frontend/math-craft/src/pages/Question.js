@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import './Question.css';
-
+import { baseUrl } from '../Urls';
 
 
 export default function Question() {
@@ -41,7 +41,7 @@ export default function Question() {
 
   const fetchBadgeUpdate = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/answer/count-votes', {
+      const response = await fetch(`${baseUrl}/api/answer/count-votes`, {
         credentials: 'include',
       });
       const data = await response.json();
@@ -62,7 +62,7 @@ export default function Question() {
   const fetchQuestions = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/question', {
+      const response = await fetch(`${baseUrl}/api/question`, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -94,7 +94,7 @@ export default function Question() {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/user/current", {
+      const response = await fetch(`${baseUrl}/api/user/current`, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -133,7 +133,7 @@ export default function Question() {
       const categoryData = await categoryResponse.json();
       const category = categoryData.category;
 
-      const response = await fetch(`http://localhost:5000/api/question/${currentUser.username}`, {
+      const response = await fetch(`${baseUrl}/api/question/${currentUser.username}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

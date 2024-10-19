@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './Answer.css';
+import { baseUrl } from '../Urls';
 import Comment from '../components/Comment';
 
 const Answer = () => {
@@ -26,7 +27,7 @@ const Answer = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/user/current', {
+      const response = await fetch(`${baseUrl}/api/user/current`, {
         credentials: 'include',
       });
       const data = await response.json();
@@ -39,7 +40,7 @@ const Answer = () => {
   const fetchQuestionAndAnswers = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/answer/${questionId}`, {
+      const response = await fetch(`${baseUrl}/api/answer/${questionId}`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -67,7 +68,7 @@ const Answer = () => {
   const handleDeleteAnswer = (answerId) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this answer?');
     if (confirmDelete) {
-      fetch(`http://localhost:5000/api/answer/delete/${answerId}`, {
+      fetch(`${baseUrl}/api/answer/delete/${answerId}`, {
         method: 'DELETE',
         credentials: 'include',
       })
@@ -86,7 +87,7 @@ const Answer = () => {
 
   const handleVote = async (answerId, voteType) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/answer/${answerId}/${voteType}`, {
+      const response = await fetch(`${baseUrl}/api/answer/${answerId}/${voteType}`, {
         method: 'PATCH',
         credentials: 'include',
       });
@@ -108,7 +109,7 @@ const Answer = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:5000/api/answer/${questionId}`, {
+      const response = await fetch(`${baseUrl}/api/answer/${questionId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +135,7 @@ const Answer = () => {
     if (!newComment.trim()) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/comment/${answerId}`, {
+      const response = await fetch(`${baseUrl}/api/comment/${answerId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +162,7 @@ const Answer = () => {
 
   const fetchCommentsForAnswer = async (answerId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/comment/${answerId}`, {
+      const response = await fetch(`${baseUrl}/api/comment/${answerId}`, {
         method: 'GET',
         credentials: 'include',
       });
