@@ -61,6 +61,11 @@ const createUserQuestion = async (req, res, next) => {
   const { question, category } = req.body;
   const username = req.params.username;
 
+  if(question==="Error"){
+    const error = new HttpError("Ask Mathematics questions only!!", 500);
+    return next(error)
+  }
+
   const user = await User.findOne({ username: username });
   if (!user) {
     return res.status(404).json({ error: "User does not exist" });
