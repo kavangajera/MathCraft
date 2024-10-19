@@ -1,4 +1,13 @@
 {
+  "name": "frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "vercel-build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "axios": "^1.7.7",
     "react-router-dom": "^6.26.2",
