@@ -3,6 +3,8 @@ from flask_cors import CORS
 from ai21 import AI21Client
 from ai21.models.chat import UserMessage
 import json
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -12,7 +14,8 @@ with open('cred.json') as f:
     config = json.load(f)
 
 # Initialize the AI21 client with the API key
-API_KEY = config["AI21_KEY"]
+load_dotenv('../backend/.env')
+API_KEY = os.getenv("AI21_KEY")
 client = AI21Client(api_key=API_KEY)
 
 def single_message_instruct(question):
