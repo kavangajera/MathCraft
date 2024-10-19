@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://math-craft-one.vercel.app', // your React app's URL
+  origin: 'https://math-craft-ruddy.vercel.app', // your React app's URL
   credentials: true // Allow cookies to be sent
 }));
 app.use("/api/user", userRoutes);
@@ -67,7 +67,7 @@ const users = {}; // Object to store connected users
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://math-craft-one.vercel.app",
+    origin: "https://math-craft-ruddy.vercel.app",
     credentials: true,
   },
 });
