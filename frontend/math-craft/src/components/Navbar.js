@@ -85,34 +85,17 @@ function Navbar({ badgeMessage , onProfileClick }) {
               className="nav-button"
               aria-label="MathTools"
             >
-              <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="w-6 h-6"
-    >
-      {/* X and Y axes */}
-      <line x1="2" y1="22" x2="22" y2="22" />
-      <line x1="2" y1="2" x2="2" y2="22" />
-
-      {/* X-axis arrow */}
-      <polyline points="21,21 22,22 21,23" />
-
-      {/* Y-axis arrow */}
-      <polyline points="1,3 2,2 3,3" />
-
-      {/* Graph line */}
-      <path d="M2 18L6 12L10 16L14 8L18 14L22 6" />
-
-      {/* Data points */}
-      <circle cx="6" cy="12" r="0.5" fill="currentColor" />
-      <circle cx="10" cy="16" r="0.5" fill="currentColor" />
-      <circle cx="14" cy="8" r="0.5" fill="currentColor" />
-      <circle cx="18" cy="14" r="0.5" fill="currentColor" />
-    </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon">
+                <line x1="2" y1="22" x2="22" y2="22" />
+                <line x1="2" y1="2" x2="2" y2="22" />
+                <polyline points="21,21 22,22 21,23" />
+                <polyline points="1,3 2,2 3,3" />
+                <path d="M2 18L6 12L10 16L14 8L18 14L22 6" />
+                <circle cx="6" cy="12" r="0.5" fill="currentColor" />
+                <circle cx="10" cy="16" r="0.5" fill="currentColor" />
+                <circle cx="14" cy="8" r="0.5" fill="currentColor" />
+                <circle cx="18" cy="14" r="0.5" fill="currentColor" />
+              </svg>
               <span className="nav-label">MathTools</span>
             </button>
 
