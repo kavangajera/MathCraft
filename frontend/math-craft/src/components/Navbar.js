@@ -85,9 +85,28 @@ function Navbar({ badgeMessage , onProfileClick }) {
               className="nav-button"
               aria-label="MathTools"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="icon">
-                <path d="M22 16.7L15.3 10l6.7-6.7L22 3l-7 7-7-7-0.3 0.3L14.4 10l-6.7 6.7L8 17l7-7 7 7z" />
-              </svg>
+              <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="w-6 h-6"
+    >
+      {/* X and Y axes */}
+      <line x1="2" y1="22" x2="22" y2="22" />
+      <line x1="12" y1="2" x2="12" y2="22" />
+
+      {/* Parabola curve */}
+      <path d="M2 18 Q 12 2 22 18" />
+
+      {/* Origin point */}
+      <circle cx="12" cy="18" r="1" fill="currentColor" />
+
+      {/* Vertex point */}
+      <circle cx="12" cy="2" r="1" fill="currentColor" />
+    </svg>
               <span className="nav-label">MathTools</span>
             </button>
 
@@ -106,11 +125,11 @@ function Navbar({ badgeMessage , onProfileClick }) {
               className="nav-button"
               aria-label="Ask"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="icon">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
-                <path d="M12 17h.01" />
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="icon">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+  <line x1="12" y1="17" x2="12" y2="17" />
+</svg>
               <span className="nav-label">Ask</span>
             </button>
             <button
