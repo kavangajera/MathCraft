@@ -66,4 +66,7 @@ MathCraft is a cutting-edge platform where math enthusiasts can ask questions, e
 1. Clone the repository:  
    ```bash  
    git clone https://github.com/yourusername/MathCraft.git  
-   cd MathCraft  
+   cd MathCraft
+2. Try MathCraft now!:  
+   ```bash  
+    
