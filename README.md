@@ -48,10 +48,18 @@ MathCraft is a cutting-edge platform where math enthusiasts can ask questions, e
 ## 📸 **Screenshots**  
 
 ### 🏠 **Homepage**  
-![Homepage Screenshot](https://via.placeholder.com/800x400?text=Homepage+Screenshot)
+![image](https://github.com/user-attachments/assets/b155d274-f424-48ab-85ce-9c680e206157)
+
 
 ### 🤔 **Ask a Question**  
-![Ask a Question Screenshot](https://via.placeholder.com/800x400?text=Ask+a+Question)
+![image](https://github.com/user-attachments/assets/d575d59e-08eb-4f43-9615-37411a7455c6)
+
+### ** Others **
+![image](https://github.com/user-attachments/assets/d6968998-22f3-4d7e-b3ae-fb6f7830fde0)
+
+<img width="1286" alt="Screenshot 2025-01-23 at 10 28 53 PM" src="https://github.com/user-attachments/assets/d0f8d908-6395-4a18-89d3-53663afcdf8d" />
+
+
 
 ---
 
@@ -68,5 +76,6 @@ MathCraft is a cutting-edge platform where math enthusiasts can ask questions, e
    git clone https://github.com/yourusername/MathCraft.git  
    cd MathCraft
 2. Try MathCraft now!:  
-   ```bash  
+   ```bash
+   https://math-craft-ruddy.vercel.app/
     
