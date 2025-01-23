@@ -59,6 +59,7 @@ MathCraft is a cutting-edge platform where math enthusiasts can ask questions, e
 
 <img width="1286" alt="Screenshot 2025-01-23 at 10 28 53 PM" src="https://github.com/user-attachments/assets/d0f8d908-6395-4a18-89d3-53663afcdf8d" />
 
+<img width="774" alt="Screenshot 2025-01-23 at 10 29 16 PM" src="https://github.com/user-attachments/assets/0202dd76-962e-495f-8159-98c08d19efb7" />
 
 
 ---
