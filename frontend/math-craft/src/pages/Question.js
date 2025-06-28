@@ -191,7 +191,7 @@ export default function Question() {
           {/* <h4>{badgeMessage}</h4> */}
           <form onSubmit={handleSubmit}>
             <input
-              type="text"
+              type="textbox"
               value={newQuestion}
               onChange={(e) => setNewQuestion(e.target.value)}
               placeholder="Enter your math question"
